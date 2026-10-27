@@ -227,3 +227,6 @@ python test_smartcampus_audit.py
 ## 🛡️ License & Credits
 - **Institution**: Madhav Institute of Technology & Science (MITS), Gwalior
 - **System**: SmartCampus Lost & Found Platform
+
+# Findora
+A user friendly lost and found hub 
