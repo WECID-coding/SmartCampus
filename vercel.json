@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/auth/(.*)", "destination": "/api/index.py" },
+    { "source": "/reports/(.*)", "destination": "/api/index.py" },
+    { "source": "/reports", "destination": "/api/index.py" },
+    { "source": "/claims/(.*)", "destination": "/api/index.py" },
+    { "source": "/claims", "destination": "/api/index.py" },
+    { "source": "/notifications/(.*)", "destination": "/api/index.py" },
+    { "source": "/notifications", "destination": "/api/index.py" },
+    { "source": "/ai/(.*)", "destination": "/api/index.py" },
+    { "source": "/admin/stats", "destination": "/api/index.py" },
+    { "source": "/admin/claims(.*)", "destination": "/api/index.py" },
+    { "source": "/admin/reports(.*)", "destination": "/api/index.py" },
+    { "source": "/uploads/(.*)", "destination": "/api/index.py" },
+    { "source": "/docs", "destination": "/api/index.py" },
+    { "source": "/openapi.json", "destination": "/api/index.py" }
+  ]
+}

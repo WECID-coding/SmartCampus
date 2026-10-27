@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>SmartCampus — MITS Gwalior Lost & Found Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/reports.css">
+  <link rel="stylesheet" href="css/home.css">
+  <script src="js/theme.js"></script>
+</head>
+<body class="dark" data-page="home">
+
+  <!-- Sticky Glassmorphic Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a class="active" href="index.html">Home</a>
+        <a href="pages/browse.html">Browse Reports</a>
+        <a href="pages/my-reports.html">My Reports</a>
+        <a href="pages/how-it-works.html">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <a class="btn secondary hide-mobile" href="pages/report.html?mode=found">Found an item?</a>
+        <a class="btn primary" href="pages/report.html?mode=lost">Report Lost Item</a>
+        <button class="menu-btn" id="menuToggle" aria-label="Open navigation menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a class="active" href="index.html">Home</a>
+      <a href="pages/browse.html">Browse Reports</a>
+      <a href="pages/my-reports.html">My Reports</a>
+      <a href="pages/how-it-works.html">How It Works</a>
+      <div class="mobile-cta-group">
+        <a class="btn secondary" href="pages/report.html?mode=found">I Found Something</a>
+        <a class="btn primary" href="pages/report.html?mode=lost">Report Lost Item</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <span class="hero-live-dot"></span>
+            MITS Gwalior Campus Community Network
+          </div>
+          <h1>Lost something on campus?<br><span>Let's bring it back together.</span></h1>
+          <p class="hero-copy">
+            A real-time, verified Lost & Found platform for MITS students and faculty. Stop scrolling noisy WhatsApp groups — search active reports, pinpoint campus classrooms & seminar halls, and claim items securely.
+          </p>
+
+          <!-- Quick Hero Search Bar with Instant Autocomplete Dropdown -->
+          <div class="hero-search-wrapper" id="heroSearchWrapper">
+            <form class="hero-search-box" id="heroSearchForm" autocomplete="off">
+              <span class="hero-search-icon">🔍</span>
+              <input class="hero-search-input" id="heroSearchInput" type="text" placeholder="Search lost keys, wallet, ID card, headphones, room J115..." autocomplete="off">
+              <button class="btn primary small" type="submit">Search</button>
+            </form>
+            <div class="hero-search-dropdown" id="heroSearchDropdown" role="listbox"></div>
+          </div>
+
+          <div class="hero-actions">
+            <a class="btn lost-btn large" href="pages/report.html?mode=lost">🚨 Report Lost Item</a>
+            <a class="btn found-btn large" href="pages/report.html?mode=found">✨ I Found Something</a>
+          </div>
+        </div>
+
+        <!-- Live Community Feed Showcase Widget -->
+        <div class="hero-showcase">
+          <div class="showcase-header">
+            <div class="showcase-title">
+              <strong>Campus Live Feed</strong>
+              <small>Real-time reports across MITS</small>
+            </div>
+            <div class="showcase-tabs" id="feedTabs">
+              <button class="showcase-tab active" data-feed-type="all">All</button>
+              <button class="showcase-tab" data-feed-type="lost">Lost</button>
+              <button class="showcase-tab" data-feed-type="found">Found</button>
+            </div>
+          </div>
+
+          <div class="showcase-feed" id="homeLiveFeed">
+            <!-- Populated dynamically by home.js -->
+          </div>
+
+          <div class="showcase-footer">
+            <a href="pages/browse.html">View all active reports in directory →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Metrics Strip -->
+    <section class="section" style="padding-top: 10px; padding-bottom: 50px;">
+      <div class="container">
+        <div class="metrics-row">
+          <div class="metric-card">
+            <strong id="statReunitedRate">94%</strong>
+            <span>Items Reunited Rate Across Campus</span>
+          </div>
+          <div class="metric-card">
+            <strong id="statActiveUsers">4,000+</strong>
+            <span>Active MITS Students &amp; Faculty</span>
+          </div>
+          <div class="metric-card">
+            <strong>&lt; 24h</strong>
+            <span>Average Claim &amp; Verification Speed</span>
+          </div>
+          <div class="metric-card">
+            <strong id="statCampusRooms">235+</strong>
+            <span>Verified Classrooms, Seminar Halls &amp; Labs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Explorer Grid -->
+    <section class="section soft">
+      <div class="container">
+        <div class="section-heading center">
+          <span class="section-label">QUICK FINDER</span>
+          <h2>Explore by Category</h2>
+          <p>Find lost or found items categorized by frequent campus belongings.</p>
+        </div>
+
+        <div class="categories-grid">
+          <a class="category-card" href="pages/browse.html?category=electronics">
+            <div class="cat-icon-wrap">💻</div>
+            <strong>Electronics</strong>
+            <small>Phones, Earbuds, Chargers</small>
+          </a>
+          <a class="category-card" href="pages/browse.html?category=documents">
+            <div class="cat-icon-wrap">🪪</div>
+            <strong>Documents & IDs</strong>
+            <small>College Cards, Passes, Notes</small>
+          </a>
+          <a class="category-card" href="pages/browse.html?category=keys">
+            <div class="cat-icon-wrap">🔑</div>
+            <strong>Keys & Locks</strong>
+            <small>Hostel Keys, Bike Keys</small>
+          </a>
+          <a class="category-card" href="pages/browse.html?category=bags">
+            <div class="cat-icon-wrap">🎒</div>
+            <strong>Bags & Packs</strong>
+            <small>Backpacks, Pouches, Totes</small>
+          </a>
+          <a class="category-card" href="pages/browse.html?category=accessories">
+            <div class="cat-icon-wrap">⌚</div>
+            <strong>Accessories</strong>
+            <small>Watches, Wallets, Specs</small>
+          </a>
+          <a class="category-card" href="pages/browse.html?category=education">
+            <div class="cat-icon-wrap">📚</div>
+            <strong>Academic Items</strong>
+            <small>Calculators, Drafters, Books</small>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Featured Recent Reports Grid -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <span class="section-label">LATEST ACTIVITY</span>
+            <h2>Recent Campus Reports</h2>
+            <p>Active items reported lost or found by students today.</p>
+          </div>
+          <a class="btn secondary" href="pages/browse.html">Browse All Reports →</a>
+        </div>
+
+        <div class="cards-grid" id="homeFeaturedReports">
+          <!-- Populated by home.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4-Step Reunited Workflow -->
+    <section class="section soft">
+      <div class="container">
+        <div class="section-heading center">
+          <span class="section-label">STREAMLINED PROCESS</span>
+          <h2>How SmartCampus Works</h2>
+          <p>Four transparent steps ensure lost items return to their rightful owners safely.</p>
+        </div>
+
+        <div class="timeline-grid">
+          <div class="timeline-step">
+            <span class="step-num">01</span>
+            <h3>Submit Details</h3>
+            <p>Report the lost or found item with exact landmark, date, category and identifiable photo.</p>
+          </div>
+          <div class="timeline-step">
+            <span class="step-num">02</span>
+            <h3>Smart Match</h3>
+            <p>Our algorithms compare item types and campus locations to suggest instant candidate matches.</p>
+          </div>
+          <div class="timeline-step">
+            <span class="step-num">03</span>
+            <h3>Ownership Check</h3>
+            <p>Claimants answer private identifying questions (stickers, serials, lock codes) to prevent false claims.</p>
+          </div>
+          <div class="timeline-step">
+            <span class="step-num">04</span>
+            <h3>Safe Handover</h3>
+            <p>Items are handed over at verified campus desks (Library desk, Department office, or Security).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Safety & Trust Guarantees -->
+    <section class="section">
+      <div class="container">
+        <div class="section-heading center">
+          <span class="section-label">SECURITY GUARANTEES</span>
+          <h2>Campus Integrity & Privacy First</h2>
+          <p>Designed strictly for the Madhav Institute of Technology & Science community.</p>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-card">
+            <div class="trust-icon">🔒</div>
+            <h3>Zero Exposed Passwords or PINs</h3>
+            <p>We mandate that private details (passcodes, wallet money count, card numbers) remain hidden from public view for secure verification.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon">🏛️</div>
+            <h3>Verified MITS Community</h3>
+            <p>Authentication via student and faculty credentials (@mitsgwl.ac.in and @mitsgwalior.in) guarantees accountability.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon">📍</div>
+            <h3>Accurate Landmark Mapping</h3>
+            <p>Reports are anchored to actual campus spots: Central Library, Main Building, Canteen, Hostels, and Jubilee Gate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modern Dark Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <div class="brand-mark">✓</div>
+          <div class="brand-text">
+            <strong>SmartCampus</strong>
+            <small>MITS Gwalior</small>
+          </div>
+        </a>
+        <p>A campus-wide digital Lost & Found initiative engineered for students, professors, and administration at MITS Gwalior.</p>
+        <div class="footer-status-pill">
+          <span class="footer-status-dot"></span>
+          Campus Portal Operational
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <a href="index.html">Home</a>
+        <a href="pages/browse.html">Browse Reports</a>
+        <a href="pages/my-reports.html">My Reports</a>
+        <a href="pages/how-it-works.html">How It Works</a>
+        <a href="pages/notifications.html">Notifications</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Actions</h4>
+        <a href="pages/report.html?mode=lost">Report Lost Belonging</a>
+        <a href="pages/report.html?mode=found">Submit Found Item</a>
+        <a href="pages/login.html">Institute Sign In</a>
+        <a href="pages/register.html">Register Account</a>
+      </div>
+
+      <div class="footer-contact-info">
+        <h4>Campus Desk</h4>
+        <p>Madhav Institute of Technology & Science</p>
+        <p>Race Course Road, Gwalior (M.P.) — 474005</p>
+        <p style="margin-top: 10px; color: var(--accent);">Emergency Security: Ext. 2101</p>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>© 2026 SmartCampus Demo · MITS Gwalior. Built for campus integrity.</span>
+      <a target="_blank" rel="noopener" href="https://web.mitsgwalior.in/">MITS Official Portal ↗</a>
+    </div>
+  </footer>
+
+  <script src="js/campus-locations.js"></script>
+  <script src="js/location-picker.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/ai-assistant.js"></script>
+</body>
+</html>

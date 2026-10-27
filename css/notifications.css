@@ -1,0 +1,207 @@
+/* ==========================================================================
+   SmartCampus Notifications Styling — notifications.css
+   Full Light & Dark Theme Support
+   ========================================================================== */
+
+.notifications-page {
+  padding: 48px 0 80px;
+}
+
+.notif-header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.page-heading h1 {
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  margin: 6px 0 8px;
+  color: var(--heading);
+}
+
+.page-heading p {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0;
+}
+
+.notif-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.notif-filter-pill {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.notif-filter-pill:hover {
+  color: var(--heading);
+  border-color: var(--border-highlight);
+}
+
+.notif-filter-pill.active {
+  background: var(--surface-hover);
+  color: var(--primary);
+  border-color: var(--border-highlight);
+}
+
+.mark-all-btn {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mark-all-btn:hover {
+  color: var(--primary-strong);
+}
+
+/* Notification List */
+.notification-list {
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+}
+
+.notification {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  background: var(--surface-card);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.notification:hover {
+  border-color: var(--border-highlight);
+  transform: translateY(-1.5px);
+  box-shadow: var(--shadow);
+}
+
+.notification.unread {
+  border-left: 4px solid var(--primary);
+  background: var(--surface);
+}
+
+.notification-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--soft);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-icon.claim {
+  background: var(--warning-bg);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.notification-icon.match {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.notification-icon.verified {
+  background: var(--found-bg);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.notification-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.notification-top strong {
+  font-size: 15px;
+  color: var(--heading);
+}
+
+.notification-top time {
+  color: var(--subtle);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.notification-body p {
+  margin: 4px 0 12px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.notification-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-subtle {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.btn-subtle:hover {
+  color: var(--primary-strong);
+}
+
+.mark-read-btn {
+  font-size: 12px;
+  color: var(--subtle);
+  cursor: pointer;
+}
+
+.mark-read-btn:hover {
+  color: var(--text);
+}
+
+.status-read {
+  font-size: 11px;
+  color: var(--subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .notification {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mark-all-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}

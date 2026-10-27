@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>Report Item — SmartCampus MITS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/reports.css">
+  <link rel="stylesheet" href="../css/report.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body class="dark" data-page="report">
+
+  <!-- Sticky Glassmorphic Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="../index.html">Home</a>
+        <a href="browse.html">Browse Reports</a>
+        <a href="my-reports.html">My Reports</a>
+        <a href="how-it-works.html">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <button class="menu-btn" id="menuToggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="../index.html">Home</a>
+      <a href="browse.html">Browse Reports</a>
+      <a href="my-reports.html">My Reports</a>
+      <a href="how-it-works.html">How It Works</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="report-wrap">
+      <div class="container report-layout">
+        
+        <!-- Left Column: Guidance & Live Card Preview -->
+        <aside class="report-intro">
+          <span class="section-label">MITS CAMPUS INITIATIVE</span>
+          <h1 id="reportTitle">Report a Lost Item</h1>
+          <p id="reportSubtitle">
+            Tell us what you lost and where you last saw it. Clear details make automated matching and student claims seamless.
+          </p>
+
+          <!-- Interactive Real-time Preview Widget -->
+          <div class="live-preview-box">
+            <div class="preview-label">
+              <span>Card Live Preview</span>
+              <span class="preview-pulse">Updates as you type</span>
+            </div>
+            <div id="reportLivePreview">
+              <!-- Dynamically rendered by report.js -->
+            </div>
+          </div>
+
+          <!-- Guidelines Checklist -->
+          <div class="report-guidance-list">
+            <div class="guidance-item">
+              <span class="guidance-icon">🏷️</span>
+              <div>
+                <strong>Distinguishing Characteristics</strong>
+                <small>Mention unique brands, stickers, case color, or minor scratches.</small>
+              </div>
+            </div>
+            <div class="guidance-item">
+              <span class="guidance-icon">📍</span>
+              <div>
+                <strong>Precise Campus Landmark</strong>
+                <small>Pick the nearest building: Library, Hostels, Canteen, or Grounds.</small>
+              </div>
+            </div>
+            <div class="guidance-item">
+              <span class="guidance-icon">🔒</span>
+              <div>
+                <strong>Keep Private Proof Secret</strong>
+                <small>Never post PINs, lock passwords, card numbers, or exact cash amounts.</small>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Column: Submission Form -->
+        <form class="report-form" id="reportForm">
+          <div class="form-head">
+            <div>
+              <span class="section-label">SUBMISSION FORM</span>
+              <h2>Item Specifications</h2>
+            </div>
+            <span class="required-note">* Required fields</span>
+          </div>
+
+          <!-- Segmented Type Selector -->
+          <div class="form-toggle">
+            <button type="button" data-mode="lost" class="active">🚨 I Lost Something</button>
+            <button type="button" data-mode="found">✨ I Found Something</button>
+          </div>
+
+          <!-- Section 1: Classification -->
+          <div class="form-section">
+            <div class="section-title">
+              <span class="section-title-num">1</span>
+              <div>
+                <strong>What is the item?</strong>
+                <small>Specify the recognizable title and category.</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                Item Name <span>*</span>
+                <input id="itemName" required maxlength="80" placeholder="e.g. Black Dell Laptop Charger, Titan Watch">
+              </label>
+
+              <label>
+                Category <span>*</span>
+                <select id="itemCategory" required>
+                  <option value="">Select category...</option>
+                  <option value="electronics">💻 Electronics</option>
+                  <option value="documents">🪪 Documents & IDs</option>
+                  <option value="accessories">⌚ Accessories & Wallets</option>
+                  <option value="bags">🎒 Bags & Backpacks</option>
+                  <option value="keys">🔑 Keys & Locks</option>
+                  <option value="education">📚 Academic Materials</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section 2: Location & Date -->
+          <div class="form-section">
+            <div class="section-title">
+              <span class="section-title-num">2</span>
+              <div>
+                <strong>Where & when was it seen?</strong>
+                <small>Choose the closest MITS campus landmark.</small>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div style="grid-column: 1 / -1;">
+                <span style="display: block; font-size: 13.5px; font-weight: 700; color: var(--heading); margin-bottom: 6px;">
+                  Classroom, Seminar Hall or Room <span style="color: var(--lost)">*</span>
+                </span>
+                <!-- Interactive Searchable Campus Combobox -->
+                <div id="reportLocationPickerContainer"></div>
+                <input type="hidden" id="itemLocation" name="itemLocation">
+              </div>
+
+              <label>
+                Date <span>*</span>
+                <input id="itemDate" type="date" required>
+              </label>
+            </div>
+          </div>
+
+          <!-- Section 3: Descriptive Details -->
+          <div class="form-section">
+            <div class="section-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <span class="section-title-num">3</span>
+                <div>
+                  <strong>Description & Identifying Details</strong>
+                  <small>Provide public identifying context for the community.</small>
+                </div>
+              </div>
+              <button type="button" class="ai-enhance-btn" id="aiEnhanceReportBtn">
+                ✨ AI Auto-Fill & Polish
+              </button>
+            </div>
+
+            <label class="full">
+              Detailed Description <span>*</span>
+              <textarea id="itemDescription" rows="4" maxlength="500" required placeholder="Color, brand name, specific room details (e.g. 2nd row desk in J115), or distinguishing signs..."></textarea>
+              <small class="counter"><span id="charCount">0</span> / 500 characters</small>
+            </label>
+
+            <!-- File Upload Dropzone -->
+            <div class="upload-dropzone">
+              <span>Photo Evidence <small style="color: var(--muted);">(Optional, max 5 MB)</small></span>
+              <label class="upload-box" id="uploadLabel">
+                <input id="itemPhoto" type="file" accept="image/*">
+                <span class="upload-icon">📷</span>
+                <span id="photoName">Click or drag an image here to attach a photograph</span>
+              </label>
+              <div id="photoPreviewContainer" style="display:none; margin-top:10px; align-items:center; gap:12px; padding:10px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);">
+                <img id="photoPreviewImg" src="" alt="Selected preview" style="width:52px; height:52px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border);">
+                <div style="flex:1; min-width:0;">
+                  <strong id="photoPreviewName" style="display:block; font-size:13px; color:var(--heading); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></strong>
+                  <small id="photoPreviewSize" style="color:var(--muted); font-size:11.5px;"></small>
+                </div>
+                <button type="button" id="photoRemoveBtn" style="color:var(--lost); font-size:12px; font-weight:700; cursor:pointer;">Remove ✕</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a class="btn secondary" href="../index.html">Cancel</a>
+            <button class="btn primary large" type="submit">Publish Report to Campus →</button>
+          </div>
+        </form>
+
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <span>© 2026 SmartCampus Demo · MITS Gwalior</span>
+      <a href="../index.html">← Back to Homepage</a>
+    </div>
+  </footer>
+
+  <script src="../js/campus-locations.js"></script>
+  <script src="../js/location-picker.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/report.js"></script>
+  <script src="../js/auth-ui.js"></script>
+  <script src="../js/ai-assistant.js"></script>
+</body>
+</html>

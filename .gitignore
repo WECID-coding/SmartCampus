@@ -1,0 +1,29 @@
+# Virtual Environment
+backend/.venv/
+.venv/
+env/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local SQLite WAL & Temp Files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Uploaded Media
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment secrets
+.env
+*.local
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

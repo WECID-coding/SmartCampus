@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>Admin Dashboard — SmartCampus MITS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/theme.js"></script>
+  <script>
+    (function() {
+      try {
+        var rawUser = localStorage.getItem('smartcampus-user');
+        var token = localStorage.getItem('smartcampus-auth-token');
+        if (!rawUser || !token) {
+          sessionStorage.setItem('adminAccessDenied', '1');
+          window.location.replace('login.html?error=unauthorized');
+          return;
+        }
+        var user = JSON.parse(rawUser);
+        if (!user || user.role !== 'admin') {
+          sessionStorage.setItem('adminAccessDenied', '1');
+          window.location.replace('login.html?error=unauthorized');
+        }
+      } catch (e) {
+        window.location.replace('login.html?error=unauthorized');
+      }
+    })();
+  </script>
+</head>
+<body class="dark">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="../index.html">Home</a>
+        <a href="browse.html">Browse Reports</a>
+        <a href="my-reports.html">My Reports</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="admin.html" class="active" style="color: var(--primary); font-weight: 800;">🛡️ Admin</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <button class="menu-btn" id="menuToggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="../index.html">Home</a>
+      <a href="browse.html">Browse Reports</a>
+      <a href="my-reports.html">My Reports</a>
+      <a href="how-it-works.html">How It Works</a>
+      <div class="mobile-cta-group">
+        <a class="btn secondary" href="report.html?mode=found">I Found Something</a>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-page">
+    <div class="admin-head">
+      <div>
+        <span class="section-label">CAMPUS ADMINISTRATION PORTAL</span>
+        <h1>Admin Control Dashboard</h1>
+        <p>Audit campus submissions, manage verification approvals, and coordinate handover desks.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button type="button" class="btn secondary small" id="exportAuditBtn">
+          📥 Export Audit Log
+        </button>
+        <button type="button" class="btn primary small" id="refreshAdminBtn">
+          🔄 Refresh Feed
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Top Stats -->
+    <section class="admin-stats" id="adminStatsGrid">
+      <div class="admin-stat">
+        <span>Total Campus Reports</span>
+        <strong id="statTotalReports">--</strong>
+      </div>
+      <div class="admin-stat">
+        <span>Pending Verifications</span>
+        <strong id="statPendingClaims" style="color: var(--warning);">3</strong>
+      </div>
+      <div class="admin-stat">
+        <span>Reunited Items</span>
+        <strong id="statReunited" style="color: var(--found);">--</strong>
+      </div>
+      <div class="admin-stat">
+        <span>Verified MITS Users</span>
+        <strong id="statVerifiedUsers" style="color: var(--primary);">4,120+</strong>
+      </div>
+    </section>
+
+    <!-- Section 1: All Campus Submissions Moderation -->
+    <section class="admin-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.25rem; margin: 0 0 4px; color: var(--heading);">Campus Reports Moderation</h2>
+          <p style="font-size: 13px; color: var(--muted); margin: 0;">Approve valid submissions, flag inappropriate posts, or mark items as reconciled.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="adminFilterInput" placeholder="Filter by item or room..." style="padding: 7px 12px; font-size: 13px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text);">
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Item & Category</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminReportsTableBody">
+            <!-- Dynamic rows rendered by js/admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 2: Ownership Claim Verification Queue -->
+    <section class="admin-section">
+      <div style="margin-bottom: 18px;">
+        <h2 style="font-size: 1.25rem; margin: 0 0 4px; color: var(--heading);">Ownership Claims & Handover Desks</h2>
+        <p style="font-size: 13px; color: var(--muted); margin: 0;">Claims submitted by students awaiting proctor / security desk physical handover verification.</p>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Claimant</th>
+              <th>Claimed Item</th>
+              <th>Identifiable Proof Details</th>
+              <th>Handover Desk</th>
+              <th>Claim Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminClaimsTableBody">
+            <tr>
+              <td>
+                <strong>Rahul Verma</strong><br>
+                <small style="color: var(--muted);">0901CS221045 · CS Dept</small>
+              </td>
+              <td>
+                <strong>HP Pavilion Laptop</strong><br>
+                <small style="color: var(--muted);">Found at CIoT Lab M007</small>
+              </td>
+              <td>
+                <span style="font-size: 12.5px;">Has "GitHub Octocat" sticker on top left lid and dual-boot GRUB loader with roll number lock.</span>
+              </td>
+              <td>Central Library Circulation Desk</td>
+              <td><span class="status-pill pending">Pending Proof Check</span></td>
+              <td>
+                <div class="admin-actions">
+                  <button type="button" class="btn secondary small" onclick="aiVerifyClaimPrompt(this, 'HP Pavilion Laptop', 'Has Octocat sticker and dual-boot GRUB loader')">🤖 AI Check</button>
+                  <button type="button" class="btn primary small" onclick="approveClaim(this, 'HP Pavilion Laptop', 'Rahul Verma')">✓ Authorize</button>
+                  <button type="button" class="btn secondary small" onclick="rejectClaim(this)">✕ Reject</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Ananya Joshi</strong><br>
+                <small style="color: var(--muted);">0901IT231012 · IT Dept</small>
+              </td>
+              <td>
+                <strong>Fastrack Analog Watch</strong><br>
+                <small style="color: var(--muted);">Found at Classroom J115</small>
+              </td>
+              <td>
+                <span style="font-size: 12.5px;">Black leather strap with slight scuff on the 4 o'clock rim mark. Engraved initials 'AJ'.</span>
+              </td>
+              <td>SAC Office (J114)</td>
+              <td><span class="status-pill pending">Pending Proof Check</span></td>
+              <td>
+                <div class="admin-actions">
+                  <button type="button" class="btn secondary small" onclick="aiVerifyClaimPrompt(this, 'Fastrack Analog Watch', 'Black leather strap with slight scuff and engraved AJ')">🤖 AI Check</button>
+                  <button type="button" class="btn primary small" onclick="approveClaim(this, 'Fastrack Analog Watch', 'Ananya Joshi')">✓ Authorize</button>
+                  <button type="button" class="btn secondary small" onclick="rejectClaim(this)">✕ Reject</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <span>© 2026 SmartCampus Admin Panel · MITS Gwalior</span>
+      <a href="../index.html">← Return to Homepage</a>
+    </div>
+  </footer>
+
+  <script src="../js/campus-locations.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/auth-ui.js"></script>
+  <script src="../js/ai-assistant.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>
