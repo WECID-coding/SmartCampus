@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>My Reports — SmartCampus MITS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/reports.css">
+  <script src="../js/theme.js"></script>
+
+  <style>
+    .dashboard-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) {
+      .dashboard-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 550px) {
+      .dashboard-metrics { grid-template-columns: 1fr; }
+    }
+    .dash-stat-card {
+      padding: 20px;
+      background: var(--surface-card);
+      backdrop-filter: var(--blur);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .dash-stat-card strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--heading);
+      margin-bottom: 4px;
+    }
+    .dash-stat-card span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .dashboard-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .dash-tab {
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .dash-tab:hover {
+      color: var(--heading);
+    }
+    .dash-tab.active {
+      background: var(--surface-hover);
+      color: var(--primary);
+      border-color: var(--border-highlight);
+    }
+    @media (max-width: 650px) {
+      .dashboard-metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="dark" data-page="my-reports">
+
+  <!-- Sticky Glassmorphic Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="../index.html">Home</a>
+        <a href="browse.html">Browse Reports</a>
+        <a class="active" href="my-reports.html">My Reports</a>
+        <a href="how-it-works.html">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+        <button class="menu-btn" id="menuToggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="../index.html">Home</a>
+      <a href="browse.html">Browse Reports</a>
+      <a class="active" href="my-reports.html">My Reports</a>
+      <a href="how-it-works.html">How It Works</a>
+      <div class="mobile-cta-group">
+        <a class="btn secondary" href="report.html?mode=found">I Found Something</a>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="section-label">STUDENT DASHBOARD</span>
+        <h1>My Campus Reports</h1>
+        <p>Manage reports submitted under your institute account and review ongoing ownership claim verifications.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 36px;">
+      <div class="container">
+        <!-- Stats Summary Strip -->
+        <div class="dashboard-metrics">
+          <div class="dash-stat-card">
+            <strong id="myTotalReports">0</strong>
+            <span>Total Submitted Reports</span>
+          </div>
+          <div class="dash-stat-card">
+            <strong id="myLostCount" style="color: var(--lost);">0</strong>
+            <span>Active Lost Items</span>
+          </div>
+          <div class="dash-stat-card">
+            <strong id="myFoundCount" style="color: var(--found);">0</strong>
+            <span>Found Articles Reported</span>
+          </div>
+          <div class="dash-stat-card">
+            <strong id="myResolvedCount" style="color: #8b5cf6;">0</strong>
+            <span>Reunited & Resolved</span>
+          </div>
+          <div class="dash-stat-card">
+            <strong id="myClaimsCount" style="color: var(--primary);">0</strong>
+            <span>Ownership Claims Filed</span>
+          </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="dashboard-tabs">
+          <button class="dash-tab active" data-my-filter="all">All Reports</button>
+          <button class="dash-tab" data-my-filter="lost">Lost Items</button>
+          <button class="dash-tab" data-my-filter="found">Found Items</button>
+          <button class="dash-tab" data-my-filter="resolved">Reunited / Resolved</button>
+          <button class="dash-tab" data-my-filter="claims">My Filed Claims</button>
+        </div>
+
+        <!-- Cards Container -->
+        <div id="myReportsGrid" class="cards-grid"></div>
+
+        <!-- Empty State -->
+        <div id="myReportsEmpty" class="empty-state" hidden>
+          <div class="empty-icon">📁</div>
+          <h3>No reports submitted yet</h3>
+          <p>When you report a lost item or log an article you found on campus, it will appear here.</p>
+          <a class="btn primary" href="report.html?mode=lost">Report a Lost Item Now →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <span>© 2026 SmartCampus Demo · MITS Gwalior</span>
+      <a href="../index.html">← Back to Homepage</a>
+    </div>
+  </footer>
+
+  <script src="../js/campus-locations.js"></script>
+  <script src="../js/location-picker.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/my-reports.js"></script>
+  <script src="../js/auth-ui.js"></script>
+  <script src="../js/ai-assistant.js"></script>
+</body>
+</html>

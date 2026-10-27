@@ -1,0 +1,15 @@
+# Vercel Deployment Ignore
+backend/.venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.db-journal
+*.db-wal
+*.log
+.git/
+.gitignore
+start-backend.bat
+start-backend-prod.bat

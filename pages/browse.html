@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>Browse Reports — SmartCampus MITS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/reports.css">
+  <link rel="stylesheet" href="../css/browse.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body class="dark" data-page="browse">
+
+  <!-- Sticky Glassmorphic Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="../index.html">Home</a>
+        <a class="active" href="browse.html">Browse Reports</a>
+        <a href="my-reports.html">My Reports</a>
+        <a href="how-it-works.html">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+        <button class="menu-btn" id="menuToggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="../index.html">Home</a>
+      <a class="active" href="browse.html">Browse Reports</a>
+      <a href="my-reports.html">My Reports</a>
+      <a href="how-it-works.html">How It Works</a>
+      <div class="mobile-cta-group">
+        <a class="btn secondary" href="report.html?mode=found">I Found Something</a>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="browse-page">
+      <div class="container">
+        <!-- Browse Heading Banner -->
+        <div class="browse-heading">
+          <div>
+            <span class="section-label">CAMPUS DIRECTORY</span>
+            <h1>Browse Reports</h1>
+            <p>Filter active items reported lost or found across MITS classrooms, seminar halls, and academic labs.</p>
+          </div>
+          <a class="btn found-btn" href="report.html?mode=found">✨ I Found Something →</a>
+        </div>
+
+        <!-- Layout: Sticky Filter Sidebar + Results Grid -->
+        <div class="browse-layout">
+          <aside class="filter-panel">
+            <div class="filter-head">
+              <h3>Filter Directory</h3>
+            </div>
+            <p>Narrow down by keyword, status, category, or location.</p>
+
+            <div class="filter-panel-inner">
+              <!-- Search box -->
+              <div class="filter-group search-group">
+                <label>Keywords</label>
+                <div class="search-box">
+                  <span>🔍</span>
+                  <input id="searchInput" type="text" placeholder="Wallet, keys, laptop, canteen...">
+                </div>
+              </div>
+
+              <!-- Status segmented buttons -->
+              <div class="filter-group">
+                <span class="filter-title">Report Type</span>
+                <div class="status-options">
+                  <button class="status-option active" data-status="all">All</button>
+                  <button class="status-option" data-status="lost">Lost</button>
+                  <button class="status-option" data-status="found">Found</button>
+                </div>
+              </div>
+
+              <!-- Category filter -->
+              <div class="filter-group">
+                <label for="categoryFilter">Category</label>
+                <select class="filter-select" id="categoryFilter">
+                  <option value="all">All Categories</option>
+                  <option value="electronics">💻 Electronics</option>
+                  <option value="documents">🪪 Documents & IDs</option>
+                  <option value="accessories">⌚ Accessories & Wallets</option>
+                  <option value="bags">🎒 Bags & Backpacks</option>
+                  <option value="keys">🔑 Keys & Locks</option>
+                  <option value="education">📚 Academic Materials</option>
+                </select>
+              </div>
+
+              <!-- Location filter -->
+              <div class="filter-group">
+                <label for="browseLocationPickerContainer">Classroom / Seminar Hall / Room</label>
+                <div id="browseLocationPickerContainer"></div>
+                <input type="hidden" id="locationFilter" value="all">
+              </div>
+
+              <div class="filter-actions">
+                <button class="btn secondary" id="clearFilters">↺ Reset Filters</button>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Results Grid Panel -->
+          <section class="results-panel">
+            <div class="results-toolbar">
+              <div>
+                <strong id="resultCount">0 reports</strong>
+                <span> · Verified MITS community posts</span>
+              </div>
+              <button class="sort-btn" id="sortButton">Newest first ↕</button>
+            </div>
+
+            <!-- Dynamic Active Filter Chips -->
+            <div class="active-filter-tags" id="activeFilterTags"></div>
+
+            <!-- Cards Container -->
+            <div class="cards-grid" id="itemsGrid"></div>
+
+            <!-- Empty State -->
+            <div class="empty-state browse-empty" id="emptyState" hidden>
+              <div class="empty-icon">🔍</div>
+              <h3>No matching reports found</h3>
+              <p>Try broadening your search keywords or switching filters to "All".</p>
+              <a class="btn primary small" href="report.html?mode=lost">Submit a Lost Item Report →</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <span>© 2026 SmartCampus Demo · MITS Gwalior</span>
+      <a href="../index.html">← Return to Homepage</a>
+    </div>
+  </footer>
+
+  <script src="../js/campus-locations.js"></script>
+  <script src="../js/location-picker.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/browse.js"></script>
+  <script src="../js/auth-ui.js"></script>
+  <script src="../js/ai-assistant.js"></script>
+</body>
+</html>

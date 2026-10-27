@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" class="dark-theme">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080c14">
+  <title>Create Account — SmartCampus MITS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <script src="../js/theme.js"></script>
+</head>
+<body class="dark">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">✓</div>
+        <div class="brand-text">
+          <strong>SmartCampus</strong>
+          <small>MITS Gwalior</small>
+        </div>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="../index.html">Home</a>
+        <a href="browse.html">Browse Reports</a>
+        <a href="my-reports.html">My Reports</a>
+        <a href="how-it-works.html">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="auth-area" data-auth-area></div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light mode">
+          <span id="themeIcon">☀</span>
+        </button>
+        <button class="menu-btn" id="menuToggle" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="../index.html">Home</a>
+      <a href="browse.html">Browse Reports</a>
+      <a href="my-reports.html">My Reports</a>
+      <a href="how-it-works.html">How It Works</a>
+      <div class="mobile-cta-group">
+        <a class="btn secondary" href="report.html?mode=found">I Found Something</a>
+        <a class="btn primary" href="report.html?mode=lost">Report Lost Item</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="section-label">NEW ACCOUNT REGISTRATION</span>
+        <h1>Create Your Account</h1>
+        <p>Join the verified MITS Lost & Found network to submit items and track ownership claims.</p>
+      </div>
+
+      <form id="registerForm">
+        <label>
+          Full Name
+          <input id="name" required maxlength="100" placeholder="e.g. Rahul Sharma">
+        </label>
+
+        <label>
+          Institute Email
+          <input id="email" type="email" required placeholder="e.g. rahul.sharma@mitsgwl.ac.in">
+        </label>
+
+        <label>
+          Password (min 8 characters)
+          <input id="password" type="password" minlength="8" required placeholder="••••••••">
+        </label>
+
+        <label>
+          Confirm Password
+          <input id="confirmPassword" type="password" minlength="8" required placeholder="••••••••">
+        </label>
+
+        <p class="form-error" id="formError" hidden></p>
+
+        <button class="btn primary large" type="submit">Complete Registration →</button>
+      </form>
+
+      <div class="auth-switch">
+        Already registered? <a href="login.html">Sign in here</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/auth-ui.js"></script>
+  <script src="../js/register.js"></script>
+</body>
+</html>

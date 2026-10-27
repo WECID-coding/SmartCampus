@@ -1,0 +1,168 @@
+/* ==========================================================================
+   SmartCampus Admin Dashboard Styling — admin.css
+   Full Light & Dark Theme Support
+   ========================================================================== */
+
+.admin-page {
+  padding: 48px 0 80px;
+}
+
+.admin-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.admin-head h1 {
+  margin: 6px 0 8px;
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  color: var(--heading);
+}
+
+.admin-head p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 15px;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.admin-stat,
+.admin-section {
+  background: var(--surface-card);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-stat {
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+.admin-stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-stat strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--heading);
+  margin-top: 6px;
+  letter-spacing: -0.02em;
+}
+
+.admin-section {
+  padding: 26px;
+  margin-bottom: 26px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.admin-table th {
+  font-size: 11.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  background: var(--soft);
+}
+
+.admin-table tr:hover td {
+  background: var(--surface-hover);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-pill.approved {
+  background: var(--found-bg);
+  color: var(--found);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-pill.rejected {
+  background: var(--lost-bg);
+  color: var(--lost);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.status-pill.pending {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-actions .btn {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .admin-head { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 520px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-section { padding: 18px; }
+}
