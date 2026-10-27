@@ -1,4 +1,4 @@
-# 🎓 SmartCampus — MITS Gwalior
+# 🎓 Findora (SmartCampus) — MITS Gwalior
 > **Intelligent, Geospatially-Enabled Campus Lost & Found Management Platform**
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -12,7 +12,7 @@
 
 ## 📖 Overview
 
-**SmartCampus** is a production-grade web portal built specifically for **Madhav Institute of Technology & Science (MITS), Gwalior**. It streamlines the reporting, tracking, matching, and physical handover of lost and found belongings across the campus complex.
+**Findora (SmartCampus)** is a modern, production-grade web platform designed for **Madhav Institute of Technology & Science (MITS), Gwalior**. It streamlines the reporting, tracking, matching, and physical handover of lost and found belongings across the academic complex.
 
 Engineered for **4,000+ concurrent students, faculty, and administrative staff**, the system combines high-concurrency database architecture, real-time claim verification, dual AI intelligence, and a geospatial campus directory covering 235+ academic venues.
 
@@ -197,11 +197,8 @@ Open PowerShell in the project directory:
 ```powershell
 cd C:\Users\DEV\Desktop\smartcampus2026
 
-# Link your GitHub repository:
-git remote add origin https://github.com/<YOUR-USERNAME>/smartcampus2026.git
-
-# Push the main branch:
-git push -u origin main
+# Push all commits to your GitHub repository:
+git push origin main
 ```
 
 ---
