@@ -215,8 +215,10 @@ SmartCampus includes zero-config serverless support for Vercel:
    ```powershell
    vercel --prod
    ```
-3. *(Optional)* In your Vercel Project Settings under **Environment Variables**, add:
-   - `GEMINI_API_KEY`: Your Google Gemini API Key.
+3. In your Vercel Project Settings under **Environment Variables**, add:
+   - `SMTP_USER`: Your sender Gmail address (e.g. `yourname@gmail.com`).
+   - `SMTP_PASSWORD`: Your 16-character Gmail App Password (from Google Account > Security > 2-Step Verification > App Passwords).
+   - `GEMINI_API_KEY`: *(Optional)* Your Google Gemini API Key for AI matchmaking.
 
 ---
 

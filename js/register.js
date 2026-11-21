@@ -33,19 +33,41 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      const submitBtn = document.getElementById('submitRegisterBtn');
+      const origBtnText = submitBtn ? submitBtn.innerHTML : 'Complete Registration →';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>⏳ Creating Account & Sending Email...</span>';
+      }
+
       try {
         const data = await apiFetch('/auth/register', {
           method: 'POST',
           body: JSON.stringify({ name, email, password })
         });
         setSession(data);
-        if (typeof showToast === 'function') {
-          showToast('Account Created! 🎉', `Welcome to SmartCampus, ${data.user.name}.`);
+
+        // Display confirmation state with Gmail direct link
+        const registerCard = document.getElementById('registerCard');
+        const successCard = document.getElementById('registerSuccessCard');
+        const greetingEl = document.getElementById('successGreeting');
+        const emailBadge = document.getElementById('registeredEmailBadge');
+
+        if (registerCard && successCard) {
+          registerCard.hidden = true;
+          successCard.hidden = false;
+          if (greetingEl) greetingEl.textContent = `Welcome to Findora, ${name}!`;
+          if (emailBadge) emailBadge.textContent = `✉️ ${email}`;
         }
-        setTimeout(() => {
-          location.href = '../index.html';
-        }, 600);
+
+        if (typeof showToast === 'function') {
+          showToast('Account Created! ✉️', `Welcome confirmation email sent to ${email}.`);
+        }
       } catch (err) {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origBtnText;
+        }
         if (errorEl) {
           errorEl.textContent = err.message || 'Registration failed. Please try again.';
           errorEl.hidden = false;

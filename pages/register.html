@@ -56,7 +56,7 @@
   </header>
 
   <main class="auth-page">
-    <div class="auth-card">
+    <div class="auth-card" id="registerCard">
       <div class="auth-header">
         <span class="section-label">NEW ACCOUNT REGISTRATION</span>
         <h1>Create Your Account</h1>
@@ -70,8 +70,8 @@
         </label>
 
         <label>
-          Institute Email
-          <input id="email" type="email" required placeholder="e.g. rahul.sharma@mitsgwl.ac.in">
+          Institute Email / Gmail
+          <input id="email" type="email" required placeholder="e.g. rahul.sharma@gmail.com or @mitsgwl.ac.in">
         </label>
 
         <label>
@@ -86,11 +86,41 @@
 
         <p class="form-error" id="formError" hidden></p>
 
-        <button class="btn primary large" type="submit">Complete Registration →</button>
+        <button class="btn primary large" id="submitRegisterBtn" type="submit">Complete Registration →</button>
       </form>
 
       <div class="auth-switch">
         Already registered? <a href="login.html">Sign in here</a>
+      </div>
+    </div>
+
+    <!-- Post-Registration Email Confirmation Card -->
+    <div class="auth-card" id="registerSuccessCard" hidden style="max-width: 480px; text-align: center;">
+      <div style="font-size: 52px; margin-bottom: 8px;">✉️</div>
+      <span class="section-label" style="color: var(--found);">REGISTRATION COMPLETE</span>
+      <h1 style="font-size: 1.55rem; margin: 6px 0 8px; color: var(--heading);" id="successGreeting">Welcome to SmartCampus!</h1>
+      <p style="color: var(--muted); font-size: 13.5px; line-height: 1.5; margin: 0 0 16px;">
+        Your institute account has been created. A welcome confirmation email has been dispatched to:
+      </p>
+
+      <div style="display: inline-block; padding: 8px 18px; background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-full); font-weight: 700; color: #38bdf8; font-size: 14px; margin-bottom: 20px;" id="registeredEmailBadge">
+        user@gmail.com
+      </div>
+
+      <div style="background: var(--surface-hover); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; text-align: left; font-size: 13px; line-height: 1.6; margin-bottom: 24px;">
+        <strong style="color: var(--heading); display: block; margin-bottom: 4px;">📬 What's inside your email?</strong>
+        • Your verified account summary and member role<br>
+        • Central Library Circulation Desk handover instructions<br>
+        • Quick links to report lost items or browse found articles
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://mail.google.com" target="_blank" rel="noopener" class="btn primary" style="background: #ea4335; border-color: #d93025; font-weight: 700; padding: 10px 20px;">
+          Open Gmail Inbox ↗
+        </a>
+        <a href="../index.html" class="btn secondary" style="padding: 10px 20px;">
+          Go to Dashboard →
+        </a>
       </div>
     </div>
   </main>

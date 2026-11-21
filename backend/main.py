@@ -23,6 +23,7 @@ from ai_service import (
     ai_chat_assistant,
     is_gemini_active
 )
+from email_service import send_welcome_email
 
 # Initialize database schema and seeds
 init_db()
@@ -284,7 +285,30 @@ def register(payload: RegisterPayload):
     conn.commit()
     conn.close()
 
-    return {"token": token, "user": user_data}
+    # Dispatch Welcome Email to user's Gmail / institute address
+    email_res = send_welcome_email(
+        to_email=payload.email.lower(),
+        user_name=payload.name,
+        role=role
+    )
+
+    return {
+        "token": token,
+        "user": user_data,
+        "email_sent": email_res.get("sent", False),
+        "email_status": email_res
+    }
+
+class EmailTriggerPayload(BaseModel):
+    email: str
+    name: Optional[str] = "Student"
+
+@app.post("/auth/send-welcome-email")
+def trigger_welcome_email(payload: EmailTriggerPayload):
+    return send_welcome_email(
+        to_email=payload.email.lower(),
+        user_name=payload.name or "Student"
+    )
 
 @app.get("/auth/me")
 def get_current_user_profile(user = Depends(get_current_user)):
