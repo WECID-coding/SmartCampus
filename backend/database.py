@@ -264,6 +264,34 @@ def init_db():
         """, default_notifs)
         conn.commit()
 
+    # Seed Default Claims if empty
+    cur.execute("SELECT COUNT(*) FROM claims")
+    if cur.fetchone()[0] == 0:
+        default_claims = [
+            (
+                1,
+                "CIoT Lab M007 around 1:30 PM",
+                'Has "GitHub Octocat" sticker on top left lid and dual-boot GRUB loader with roll number lock.',
+                "0901CS221045",
+                "pending",
+                "0901CS221045 · CS Dept"
+            ),
+            (
+                2,
+                "Classroom J115 after lecture",
+                "Black leather strap with slight scuff on the 4 o'clock rim mark. Engraved initials 'AJ'.",
+                "0901IT231012",
+                "pending",
+                "0901IT231012 · IT Dept"
+            )
+        ]
+        cur.executemany("""
+            INSERT INTO claims (
+                report_id, lost_where_when, proof, contact, status, claimant_email
+            ) VALUES (?, ?, ?, ?, ?, ?)
+        """, default_claims)
+        conn.commit()
+
     conn.close()
 
 if __name__ == "__main__":

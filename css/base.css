@@ -934,6 +934,40 @@ p {
   margin-top: 8px;
 }
 
+.claim-quick-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.claim-quick-tag {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.claim-quick-tag:hover,
+.claim-quick-tag:active {
+  background: var(--soft);
+  border-color: var(--found);
+  color: var(--found);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .claim-grid-fields {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* ---------- 8. Toast Notification ---------- */
 .toast {
   position: fixed;
