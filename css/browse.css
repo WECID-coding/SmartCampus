@@ -312,12 +312,20 @@
 }
 
 @media (max-width: 650px) {
+  .browse-page {
+    padding: 24px 0 60px;
+  }
   .browse-heading {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
   }
   .browse-heading .btn {
     width: 100%;
+  }
+  .filter-panel {
+    padding: 18px 16px;
   }
   .filter-panel-inner {
     grid-template-columns: 1fr;

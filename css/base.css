@@ -137,11 +137,17 @@ body.dark,
 html {
   scroll-behavior: smooth;
   background-color: var(--bg);
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
   background: var(--bg);
   background-image: var(--bg-radial);
   background-attachment: fixed;
@@ -152,6 +158,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.hide-mobile {
+  display: inline-flex;
 }
 
 img, svg {
@@ -462,7 +472,7 @@ p {
   display: none;
 }
 
-/* ---------- 5. Mobile Navigation ---------- */
+/* ---------- 5. Mobile Navigation & Responsive Header ---------- */
 .mobile-nav {
   display: none;
 }
@@ -481,7 +491,7 @@ p {
     background: var(--mobile-nav-bg);
     backdrop-filter: var(--blur);
     -webkit-backdrop-filter: var(--blur);
-    padding: 20px;
+    padding: 18px 20px 24px;
     border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow-lg);
     gap: 8px;
@@ -519,6 +529,101 @@ p {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 10px;
+  }
+}
+
+@media (max-width: 820px) {
+  .site-header .btn.secondary,
+  .site-header .hide-mobile,
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-header .btn.primary {
+    display: none !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .site-header {
+    height: 56px;
+  }
+  
+  .site-header .container.nav-wrap {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 12px;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+  
+  .brand {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+  
+  .brand-text strong {
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  
+  .brand-text small {
+    display: none !important;
+  }
+  
+  .nav-actions {
+    gap: 4px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+  
+  .site-header .btn.primary,
+  .site-header .btn.secondary,
+  .site-header .hide-mobile {
+    display: none !important;
+  }
+  
+  .site-header .auth-area {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .site-header .auth-link:not(.auth-btn-login) {
+    display: none !important;
+  }
+  
+  .site-header .auth-btn-login {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-height: 30px;
+    border-radius: var(--radius-full);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  
+  .icon-btn, .menu-btn, .nav-notif-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  .menu-btn {
+    display: grid !important;
+  }
+  
+  .mobile-nav .mobile-cta-group {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1899,5 +2004,58 @@ p {
 
 .ai-input-bar button:hover {
   background: var(--primary-hover);
+}
+
+/* ---------- 14. Global Mobile Viewport & Component Adaptations ---------- */
+@media (max-width: 650px) {
+  .container {
+    width: min(var(--container-width), calc(100% - 24px));
+  }
+  
+  h1 {
+    font-size: clamp(1.85rem, 6.5vw, 2.35rem);
+    line-height: 1.12;
+  }
+  
+  h2 {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+  }
+  
+  .ai-chat-fab {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  }
+  
+  .ai-chat-fab span:not(.ai-fab-icon) {
+    display: none;
+  }
+  
+  .ai-chat-fab .ai-fab-icon {
+    font-size: 22px;
+    margin: 0;
+  }
+  
+  .ai-assistant-drawer {
+    width: calc(100vw - 24px);
+    right: 12px;
+    left: 12px;
+    bottom: 74px;
+    max-height: calc(100vh - 90px);
+  }
+  
+  .notif-dropdown {
+    position: fixed;
+    top: 66px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+  }
 }
 

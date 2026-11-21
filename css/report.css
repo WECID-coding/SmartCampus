@@ -42,6 +42,9 @@
   padding: 20px;
   margin-bottom: 24px;
   box-shadow: var(--shadow);
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .preview-label {
@@ -336,11 +339,17 @@
 }
 
 @media (max-width: 650px) {
+  .report-wrap {
+    padding: 24px 0 60px;
+  }
+  .live-preview-box {
+    padding: 12px;
+  }
   .form-grid {
     grid-template-columns: 1fr;
   }
   .report-form {
-    padding: 20px;
+    padding: 18px 16px;
   }
   .form-actions {
     flex-direction: column-reverse;
