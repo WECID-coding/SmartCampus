@@ -49,6 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
     form?.requestSubmit();
   });
 
+  document.getElementById('demoAdminBtn')?.addEventListener('click', () => {
+    if (emailInp) emailInp.value = 'admin@mitsgwl.ac.in';
+    if (passInp) passInp.value = 'admin123';
+    form?.requestSubmit();
+  });
+
   // Handle unauthorized admin redirection message
   const urlParams = new URLSearchParams(location.search);
   if (urlParams.get('error') === 'unauthorized' || sessionStorage.getItem('adminAccessDenied')) {
