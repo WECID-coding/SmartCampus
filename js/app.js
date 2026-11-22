@@ -850,4 +850,7 @@ window.openModal = openModal;
 window.closeModal = closeModal;
 window.showToast = showToast;
 window.escapeHTML = escapeHTML;
+window.getReports = getReports;
+window.saveReports = saveReports;
+window.SEED_REPORTS = SEED_REPORTS;
 

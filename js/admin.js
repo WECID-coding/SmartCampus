@@ -153,6 +153,25 @@ function renderAdminReports(filterQuery = '') {
   }).join('');
 }
 
+async function syncAdminReports() {
+  try {
+    if (typeof apiFetch === 'function') {
+      const remote = await apiFetch('/reports?limit=500');
+      if (Array.isArray(remote) && remote.length) {
+        const local = typeof getReports === 'function' ? getReports() : [];
+        const localMap = new Map(local.map(r => [r.id, r]));
+        remote.forEach(r => {
+          localMap.set(r.id, { ...r, categoryLabel: r.categoryLabel || r.category_label || r.category });
+        });
+        const merged = Array.from(localMap.values());
+        if (typeof saveReports === 'function') saveReports(merged);
+        renderAdminReports(document.getElementById('adminFilterInput')?.value || '');
+        renderAdminStats();
+      }
+    }
+  } catch {}
+}
+
 function approveClaim(btn, claimId, itemName, claimantName) {
   let row = null;
   if (btn && btn.closest) {
@@ -327,7 +346,6 @@ async function aiVerifyClaimPrompt(btn, itemName, proofDetails, claimId) {
     btn.innerHTML = origText;
   }
 }
-}
 
 function approveReport(id) {
   const reports = typeof getReports === 'function' ? getReports() : [];
@@ -500,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAdminStats();
   renderAdminReports();
   renderAdminClaims();
+  syncAdminReports();
 
   const filterInput = document.getElementById('adminFilterInput');
   if (filterInput) {
@@ -512,6 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAdminStats();
     renderAdminReports(filterInput?.value || '');
     renderAdminClaims();
+    syncAdminReports();
     if (typeof showToast === 'function') {
       showToast('Feed Refreshed', 'Admin live dashboard re-synchronized.');
     }
@@ -541,6 +561,8 @@ window.rejectClaim = rejectClaim;
 window.resetClaimStatus = resetClaimStatus;
 window.aiVerifyClaimPrompt = aiVerifyClaimPrompt;
 window.renderAdminClaims = renderAdminClaims;
+window.renderAdminReports = renderAdminReports;
+window.syncAdminReports = syncAdminReports;
 window.approveReport = approveReport;
 window.toggleReportStatus = toggleReportStatus;
 window.removeReportAdmin = removeReportAdmin;
