@@ -101,7 +101,7 @@
       </div>
       <div class="admin-stat">
         <span>Pending Verifications</span>
-        <strong id="statPendingClaims" style="color: var(--warning);">3</strong>
+        <strong id="statPendingClaims" style="color: var(--warning);">--</strong>
       </div>
       <div class="admin-stat">
         <span>Reunited Items</span>
@@ -165,50 +165,7 @@
             </tr>
           </thead>
           <tbody id="adminClaimsTableBody">
-            <tr>
-              <td>
-                <strong>Rahul Verma</strong><br>
-                <small style="color: var(--muted);">0901CS221045 · CS Dept</small>
-              </td>
-              <td>
-                <strong>HP Pavilion Laptop</strong><br>
-                <small style="color: var(--muted);">Found at CIoT Lab M007</small>
-              </td>
-              <td>
-                <span style="font-size: 12.5px;">Has "GitHub Octocat" sticker on top left lid and dual-boot GRUB loader with roll number lock.</span>
-              </td>
-              <td>Central Library Circulation Desk</td>
-              <td><span class="status-pill pending">Pending Proof Check</span></td>
-              <td>
-                <div class="admin-actions">
-                  <button type="button" class="btn secondary small" onclick="aiVerifyClaimPrompt(this, 'HP Pavilion Laptop', 'Has Octocat sticker and dual-boot GRUB loader')">🤖 AI Check</button>
-                  <button type="button" class="btn primary small" onclick="approveClaim(this, 'HP Pavilion Laptop', 'Rahul Verma')">✓ Authorize</button>
-                  <button type="button" class="btn secondary small" onclick="rejectClaim(this)">✕ Reject</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Ananya Joshi</strong><br>
-                <small style="color: var(--muted);">0901IT231012 · IT Dept</small>
-              </td>
-              <td>
-                <strong>Fastrack Analog Watch</strong><br>
-                <small style="color: var(--muted);">Found at Classroom J115</small>
-              </td>
-              <td>
-                <span style="font-size: 12.5px;">Black leather strap with slight scuff on the 4 o'clock rim mark. Engraved initials 'AJ'.</span>
-              </td>
-              <td>SAC Office (J114)</td>
-              <td><span class="status-pill pending">Pending Proof Check</span></td>
-              <td>
-                <div class="admin-actions">
-                  <button type="button" class="btn secondary small" onclick="aiVerifyClaimPrompt(this, 'Fastrack Analog Watch', 'Black leather strap with slight scuff and engraved AJ')">🤖 AI Check</button>
-                  <button type="button" class="btn primary small" onclick="approveClaim(this, 'Fastrack Analog Watch', 'Ananya Joshi')">✓ Authorize</button>
-                  <button type="button" class="btn secondary small" onclick="rejectClaim(this)">✕ Reject</button>
-                </div>
-              </td>
-            </tr>
+            <!-- Dynamic rows rendered and synchronized by js/admin.js -->
           </tbody>
         </table>
       </div>

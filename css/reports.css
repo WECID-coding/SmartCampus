@@ -7,6 +7,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ---------- Item Card ---------- */
@@ -24,6 +26,8 @@
               box-shadow 0.22s ease;
   position: relative;
   box-shadow: var(--shadow);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .item-card:hover {
@@ -295,7 +299,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 680px) {
   .item-card {
     grid-template-columns: 1fr;
   }

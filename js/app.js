@@ -156,18 +156,58 @@ function normalizeReport(report) {
   return item;
 }
 
+function deduplicateReports(reports) {
+  if (!Array.isArray(reports)) return [];
+  const seenIds = new Set();
+  const seenSignatures = new Set();
+  const cleaned = [];
+
+  for (const raw of reports) {
+    if (!raw || !raw.name) continue;
+    const r = normalizeReport(raw);
+
+    // Filter out test artifact reports
+    if (r.name.includes('Audit Test') || r.name.toLowerCase().includes('test blue water bottle')) {
+      continue;
+    }
+
+    const normName = r.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normLoc = (r.location || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const sig = `${normName}|${r.type || 'lost'}|${normLoc}`;
+    const idKey = String(r.id);
+
+    if (seenIds.has(idKey) || (normName && seenSignatures.has(sig))) {
+      continue;
+    }
+
+    seenIds.add(idKey);
+    if (normName) seenSignatures.add(sig);
+    cleaned.push(r);
+  }
+  return cleaned;
+}
+
 function getReports() {
+  let items = [];
   try {
     const saved = JSON.parse(localStorage.getItem(REPORTS_KEY));
-    const items = Array.isArray(saved) && saved.length ? saved : SEED_REPORTS.map(x => ({ ...x }));
-    return items.map(normalizeReport);
+    items = Array.isArray(saved) && saved.length ? saved : SEED_REPORTS.map(x => ({ ...x }));
   } catch {
-    return SEED_REPORTS.map(x => ({ ...x })).map(normalizeReport);
+    items = SEED_REPORTS.map(x => ({ ...x }));
   }
+
+  const deduped = deduplicateReports(items);
+  if (items.length !== deduped.length) {
+    try {
+      localStorage.setItem(REPORTS_KEY, JSON.stringify(deduped));
+    } catch {}
+  }
+  return deduped;
 }
 
 function saveReports(reports) {
-  localStorage.setItem(REPORTS_KEY, JSON.stringify(reports.map(normalizeReport)));
+  const deduped = deduplicateReports(reports);
+  localStorage.setItem(REPORTS_KEY, JSON.stringify(deduped));
 }
 
 function escapeHTML(v) {
@@ -556,87 +596,200 @@ async function openFoundItModal(itemOrId) {
   });
 }
 
+function appendClaimHint(hint) {
+  const ta = document.getElementById('claimReason');
+  if (!ta) return;
+  if (ta.value && !ta.value.endsWith(' ') && !ta.value.endsWith('\n')) {
+    ta.value += ', ' + hint;
+  } else {
+    ta.value += hint;
+  }
+  ta.focus();
+}
+window.appendClaimHint = appendClaimHint;
+
 async function openOwnershipModal(item) {
   const user = getStoredUser();
-  if (!user && !getToken()) {
-    showToast('Sign In Recommended', 'Please log in with your MITS institute account to claim items.');
-  }
+  const defaultContact = user?.student_id || user?.phone || user?.email || user?.name || '';
 
   openModal(`
     <div class="modal-head">
       <div>
-        <span class="section-label">SECURE OWNERSHIP CLAIM</span>
-        <h2>Is this your item?</h2>
-        <p>Please provide private verifying details to confirm rightful ownership.</p>
+        <span class="section-label" style="color: var(--found);">⚡ QUICK 1-STEP CLAIM</span>
+        <h2 style="font-size: 1.35rem; margin-top: 4px;">Claim This Item</h2>
+        <p style="font-size: 13px; color: var(--muted); margin: 0;">Verify in 1 quick step to authorize handover at the campus security desk.</p>
       </div>
       <button class="modal-close" data-close-modal aria-label="Close modal">✕</button>
     </div>
     <form class="ownership-form" id="ownershipForm">
-      <div class="claim-item-summary">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="claim-badge found">FOUND REPORT</span>
+      <div class="claim-item-summary" style="display: flex; gap: 12px; align-items: center; padding: 12px 14px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); margin-bottom: 6px;">
+        <div style="font-size: 28px;">${iconFor(item)}</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 2px;">
+            <span class="claim-badge found">FOUND ARTICLE</span>
+            <small style="color: var(--muted); font-size: 11px;">#${item.id}</small>
+          </div>
+          <strong style="font-size: 15px; color: var(--heading); display: block; margin: 0 0 2px;">${escapeHTML(item.name)}</strong>
+          <small style="color: var(--muted); font-size: 12px; display: block;">📍 Found at ${escapeHTML(item.location)} · Reported ${escapeHTML(item.time || 'Recently')}</small>
         </div>
-        <strong>${escapeHTML(item.name)}</strong>
-        <small>📍 ${escapeHTML(item.location)} · Reported ${escapeHTML(item.time)}</small>
       </div>
       
-      <label>
-        <span>Where & when did you lose it? <b class="req">*</b></span>
-        <input id="claimLost" required placeholder="e.g. Near Library stairs around 2:30 PM on Monday">
-      </label>
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label for="claimReason" style="font-size: 13px; font-weight: 700; color: var(--heading); margin: 0;">
+            Distinctive Proof or Secret Detail <b class="req">*</b>
+          </label>
+        </div>
+        <div class="claim-quick-chips" style="margin-bottom: 8px;">
+          <span style="font-size: 11.5px; color: var(--muted); align-self: center;">Quick prompt:</span>
+          <button type="button" class="claim-quick-tag" onclick="appendClaimHint('📱 Lock Screen: ')">📱 Wallpaper</button>
+          <button type="button" class="claim-quick-tag" onclick="appendClaimHint('🏷️ Mark/Sticker: ')">🏷️ Sticker</button>
+          <button type="button" class="claim-quick-tag" onclick="appendClaimHint('🎨 Case/Color: ')">🎨 Case Color</button>
+          <button type="button" class="claim-quick-tag" onclick="appendClaimHint('🔑 Serial/Model: ')">🔑 Serial No</button>
+          <button type="button" class="claim-quick-tag" onclick="appendClaimHint('📦 Inside items: ')">📦 Inside</button>
+        </div>
+        <textarea id="claimReason" rows="3" required placeholder="Describe private details only the owner knows: lock screen wallpaper, stickers, case color, unique scratch, serial number, or bag contents..."></textarea>
+      </div>
 
-      <label>
-        <span>Unique identifying proof <b class="req">*</b></span>
-        <textarea id="claimReason" rows="4" required placeholder="Describe private details not mentioned publicly: engravings, stickers, screen lock wallpaper, serial number, brand, contents, etc."></textarea>
-      </label>
+      <div class="claim-grid-fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <label>
+          <span style="font-size: 13px; font-weight: 600;">Your Student ID / Phone <b class="req">*</b></span>
+          <input id="claimContact" required value="${escapeHTML(defaultContact)}" placeholder="e.g. 0901CS221045 or +91 98765...">
+        </label>
+        <label>
+          <span style="font-size: 13px; font-weight: 600;">Approx. Lost Location (Optional)</span>
+          <input id="claimLost" placeholder="e.g. Near Library or C-Block" value="">
+        </label>
+      </div>
 
-      <label>
-        <span>Your Contact Phone / Student ID <b class="req">*</b></span>
-        <input id="claimContact" required placeholder="e.g. 0901CS221045 or +91 98765 43210">
-      </label>
+      <div style="padding: 10px 12px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: var(--radius-sm); font-size: 12.5px; color: var(--text);">
+        ℹ️ Once authorized by proctors, you will receive an approval notification to collect this item from the <strong>Central Library Circulation Desk</strong>.
+      </div>
 
-      <div class="form-actions">
+      <div class="form-actions" style="margin-top: 4px;">
         <button type="button" class="btn secondary" data-close-modal>Cancel</button>
-        <button class="btn primary" type="submit">Submit Ownership Claim →</button>
+        <button class="btn primary" type="submit" style="background: var(--found); border-color: #059669; font-weight: 700;">
+          Submit Claim for Handover ✓
+        </button>
       </div>
     </form>
   `);
 
   document.getElementById('ownershipForm').addEventListener('submit', async e => {
     e.preventDefault();
+    const proof = document.getElementById('claimReason').value.trim();
+    const contact = document.getElementById('claimContact').value.trim();
+    const lostWhere = document.getElementById('claimLost').value.trim() || 'MITS Campus';
+
+    if (!proof || !contact) {
+      if (typeof showToast === 'function') {
+        showToast('Required Information', 'Please provide a distinctive mark and your contact or student ID.');
+      }
+      return;
+    }
+
+    const claimId = Date.now();
+    const claimData = {
+      id: claimId,
+      report_id: item.id,
+      item_name: item.name,
+      item_location: item.location || 'Campus',
+      item_image_url: item.image_url || item.image || '',
+      claimant_name: user?.name || contact,
+      claimant_email: user?.email || contact,
+      contact: contact,
+      proof: proof,
+      proof_reason: proof,
+      lost_where_when: lostWhere,
+      desk: 'Central Library Circulation Desk',
+      status: 'pending',
+      created_at: 'Just now'
+    };
+
+    // 1. Save to Admin Claims store in localStorage
+    try {
+      const CLAIMS_STORAGE_KEY = 'smartcampus_claims_store_v1';
+      let adminClaims = [];
+      const raw = localStorage.getItem(CLAIMS_STORAGE_KEY);
+      if (raw) adminClaims = JSON.parse(raw);
+      if (!Array.isArray(adminClaims) || !adminClaims.length) {
+        adminClaims = (typeof DEFAULT_SEED_CLAIMS !== 'undefined') ? [...DEFAULT_SEED_CLAIMS] : [
+          {
+            id: 101,
+            report_id: 1,
+            claimant_name: 'Rahul Verma',
+            claimant_email: '0901CS221045 · CS Dept',
+            contact: '0901CS221045',
+            item_name: 'HP Pavilion Laptop',
+            item_location: 'Found at CIoT Lab M007',
+            proof: 'Has "GitHub Octocat" sticker on top left lid and dual-boot GRUB loader with roll number lock.',
+            lost_where_when: 'CIoT Lab M007 around 1:30 PM',
+            desk: 'Central Library Circulation Desk',
+            status: 'pending',
+            created_at: '2 hours ago'
+          },
+          {
+            id: 102,
+            report_id: 2,
+            claimant_name: 'Ananya Joshi',
+            claimant_email: '0901IT231012 · IT Dept',
+            contact: '0901IT231012',
+            item_name: 'Fastrack Analog Watch',
+            item_location: 'Found at Classroom J115',
+            proof: 'Black leather strap with slight scuff on the 4 o\'clock rim mark. Engraved initials \'AJ\'.',
+            lost_where_when: 'Classroom J115 after lecture',
+            desk: 'SAC Office (J114)',
+            status: 'pending',
+            created_at: '4 hours ago'
+          }
+        ];
+      }
+      adminClaims.unshift(claimData);
+      localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(adminClaims));
+    } catch (err) {
+      console.warn('LocalStorage admin claim save error:', err);
+    }
+
+    // 2. Save to Student's personal My Claims store
+    try {
+      let myClaims = [];
+      const rawMy = localStorage.getItem('smartcampus_my_claims');
+      if (rawMy) myClaims = JSON.parse(rawMy);
+      if (!Array.isArray(myClaims)) myClaims = [];
+      myClaims.unshift(claimData);
+      localStorage.setItem('smartcampus_my_claims', JSON.stringify(myClaims));
+    } catch (err) {
+      console.warn('LocalStorage personal claim save error:', err);
+    }
+
+    // 3. API sync
     try {
       await apiFetch(`/claims/${item.id}`, {
         method: 'POST',
         body: JSON.stringify({
           report_id: item.id,
-          lost_where_when: document.getElementById('claimLost').value.trim(),
-          proof: document.getElementById('claimReason').value.trim(),
-          proof_reason: document.getElementById('claimReason').value.trim(),
-          contact: document.getElementById('claimContact').value.trim()
+          lost_where_when: lostWhere,
+          proof: proof,
+          proof_reason: proof,
+          contact: contact
         })
       });
-      closeModal();
-      if (typeof window.addNotification === 'function') {
-        window.addNotification({
-          title: 'Ownership Claim Submitted',
-          message: `Your verification request for "${item.name}" has been queued for proctor review.`,
-          type: 'claim',
-          reportId: item.id
-        });
-      }
-      showToast('Claim Submitted Successfully', 'Your verification request has been queued for campus admin review.');
     } catch (err) {
-      if (typeof window.addNotification === 'function') {
-        window.addNotification({
-          title: 'Ownership Claim Recorded',
-          message: `Your claim details for "${item.name}" have been logged locally.`,
-          type: 'claim',
-          reportId: item.id
-        });
-      }
-      showToast('Claim Submitted', 'Your ownership verification details have been recorded.');
-      closeModal();
+      console.warn('Claim apiFetch sync error (local active):', err);
     }
+
+    closeModal();
+
+    if (typeof window.addNotification === 'function') {
+      window.addNotification({
+        title: 'Ownership Claim Submitted',
+        message: `Your verification request for "${item.name}" has been registered for proctor review.`,
+        type: 'claim',
+        reportId: item.id
+      });
+    }
+
+    showToast('Claim Submitted Successfully! ✓', `Your verification request for "${item.name}" has been queued. You can track status under My Reports.`);
   });
 }
 
@@ -737,4 +890,8 @@ window.openModal = openModal;
 window.closeModal = closeModal;
 window.showToast = showToast;
 window.escapeHTML = escapeHTML;
+window.getReports = getReports;
+window.saveReports = saveReports;
+window.deduplicateReports = deduplicateReports;
+window.SEED_REPORTS = SEED_REPORTS;
 

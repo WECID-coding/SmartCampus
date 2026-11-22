@@ -63,7 +63,7 @@ Engineered for **4,000+ concurrent students, faculty, and administrative staff**
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Student** | `0901cs221045` | `priya.sharma@mitsgwl.ac.in` | `mits2026pass` | Reports, claims, student dashboard | 1-Click Demo Button |
 | **Faculty** | `rgupta` | `r.gupta@mitsgwalior.in` | `mits2026pass` | Department reports, dashboard | 1-Click Demo Button |
-| **Administrator** | `admin` | `admin@mitsgwl.ac.in` | `admin123` | **Full Admin Panel (`pages/admin.html`)**, Moderation, Approvals | *Manual credentials* |
+| **Administrator** | `admin` | `admin@mitsgwl.ac.in` | `admin123` | **Full Admin Panel (`pages/admin.html`)**, Moderation, Approvals | 1-Click Demo Button |
 
 > **Security Note**: Unauthorized navigation to `pages/admin.html` without verified administrator credentials redirects immediately to login. All administrative API routes (`/admin/*`) enforce token authorization and return HTTP 403 Forbidden for unauthorized requests.
 
@@ -215,8 +215,10 @@ SmartCampus includes zero-config serverless support for Vercel:
    ```powershell
    vercel --prod
    ```
-3. *(Optional)* In your Vercel Project Settings under **Environment Variables**, add:
-   - `GEMINI_API_KEY`: Your Google Gemini API Key.
+3. In your Vercel Project Settings under **Environment Variables**, add:
+   - `SMTP_USER`: Your sender Gmail address (e.g. `yourname@gmail.com`).
+   - `SMTP_PASSWORD`: Your 16-character Gmail App Password (from Google Account > Security > 2-Step Verification > App Passwords).
+   - `GEMINI_API_KEY`: *(Optional)* Your Google Gemini API Key for AI matchmaking.
 
 ---
 

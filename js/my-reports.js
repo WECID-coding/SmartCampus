@@ -162,11 +162,46 @@ async function loadMyReports() {
 
   let mine = getMyReportsList();
 
+  // Load claims from local-first storage
+  let myClaims = [];
+  try {
+    const rawMy = localStorage.getItem('smartcampus_my_claims');
+    if (rawMy) myClaims = JSON.parse(rawMy);
+  } catch {}
+
+  // Synchronize status updates from proctor admin storage
+  try {
+    const adminRaw = localStorage.getItem('smartcampus_claims_store_v1');
+    if (adminRaw) {
+      const adminClaims = JSON.parse(adminRaw);
+      const adminMap = new Map(adminClaims.map(c => [String(c.id), c]));
+      myClaims.forEach(c => {
+        const match = adminMap.get(String(c.id));
+        if (match && match.status) {
+          c.status = match.status;
+          if (match.authorized_at) c.authorized_at = match.authorized_at;
+        }
+      });
+      localStorage.setItem('smartcampus_my_claims', JSON.stringify(myClaims));
+    }
+  } catch {}
+  myFiledClaims = Array.isArray(myClaims) ? myClaims : [];
+
   try {
     if (typeof apiFetch === 'function') {
       const claimsRes = await apiFetch('/claims/mine');
-      if (Array.isArray(claimsRes)) {
-        myFiledClaims = claimsRes;
+      if (Array.isArray(claimsRes) && claimsRes.length) {
+        const localMap = new Map(myFiledClaims.map(c => [String(c.id), c]));
+        claimsRes.forEach(rc => {
+          const key = String(rc.id);
+          if (localMap.has(key)) {
+            const local = localMap.get(key);
+            localMap.set(key, { ...rc, ...local });
+          } else {
+            localMap.set(key, rc);
+          }
+        });
+        myFiledClaims = Array.from(localMap.values());
       }
     }
   } catch {}
