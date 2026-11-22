@@ -41,6 +41,27 @@ const DEFAULT_SEED_CLAIMS = [
   }
 ];
 
+function deduplicateClaims(claims) {
+  if (!Array.isArray(claims)) return [];
+  const seenSignatures = new Set();
+  const cleaned = [];
+
+  for (const c of claims) {
+    if (!c) continue;
+    const claimant = (c.claimant_name || c.claimant_email || c.contact || '').trim().toLowerCase();
+    const item = (c.item_name || '').trim().toLowerCase();
+    const sig = `${claimant}|${item}`;
+
+    if (claimant && item && seenSignatures.has(sig)) {
+      continue;
+    }
+
+    if (claimant && item) seenSignatures.add(sig);
+    cleaned.push(c);
+  }
+  return cleaned;
+}
+
 function getAdminClaims() {
   let list = [];
   try {
@@ -49,14 +70,20 @@ function getAdminClaims() {
   } catch {}
   if (!Array.isArray(list) || !list.length) {
     list = DEFAULT_SEED_CLAIMS.map(c => ({ ...c }));
-    localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(list));
   }
-  return list;
+  const deduped = deduplicateClaims(list);
+  if (list.length !== deduped.length) {
+    try {
+      localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(deduped));
+    } catch {}
+  }
+  return deduped;
 }
 
 function saveAdminClaims(list) {
+  const deduped = deduplicateClaims(list);
   try {
-    localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(deduped));
   } catch (e) {
     console.warn('Error saving claims to localStorage:', e);
   }
@@ -159,12 +186,28 @@ async function syncAdminReports() {
       const remote = await apiFetch('/reports?limit=500');
       if (Array.isArray(remote) && remote.length) {
         const local = typeof getReports === 'function' ? getReports() : [];
-        const localMap = new Map(local.map(r => [r.id, r]));
+        const combined = [...local];
+
         remote.forEach(r => {
-          localMap.set(r.id, { ...r, categoryLabel: r.categoryLabel || r.category_label || r.category });
+          if (!r || !r.name || r.name.includes('Audit Test')) return;
+          const normName = r.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+          const normLoc = (r.location || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+
+          const matchIdx = combined.findIndex(c => {
+            const cName = c.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            const cLoc = (c.location || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            return String(c.id) === String(r.id) || (cName === normName && c.type === r.type && cLoc === normLoc);
+          });
+
+          if (matchIdx !== -1) {
+            combined[matchIdx] = { ...combined[matchIdx], ...r };
+          } else {
+            combined.push(r);
+          }
         });
-        const merged = Array.from(localMap.values());
-        if (typeof saveReports === 'function') saveReports(merged);
+
+        const deduped = typeof deduplicateReports === 'function' ? deduplicateReports(combined) : combined;
+        if (typeof saveReports === 'function') saveReports(deduped);
         renderAdminReports(document.getElementById('adminFilterInput')?.value || '');
         renderAdminStats();
       }
@@ -409,17 +452,24 @@ async function renderAdminClaims() {
     if (typeof apiFetch === 'function') {
       const remote = await apiFetch('/admin/claims');
       if (Array.isArray(remote) && remote.length) {
-        const localMap = new Map(claims.map(c => [String(c.id), c]));
         remote.forEach(rc => {
-          const key = String(rc.id);
-          if (localMap.has(key)) {
-            const local = localMap.get(key);
-            localMap.set(key, { ...rc, ...local });
+          if (!rc) return;
+          const rcClaimant = (rc.claimant_name || rc.claimant_email || rc.contact || '').trim().toLowerCase();
+          const rcItem = (rc.item_name || '').trim().toLowerCase();
+
+          const matchIdx = claims.findIndex(c => {
+            const cClaimant = (c.claimant_name || c.claimant_email || c.contact || '').trim().toLowerCase();
+            const cItem = (c.item_name || '').trim().toLowerCase();
+            return String(c.id) === String(rc.id) || (rcClaimant && rcItem && cClaimant === rcClaimant && cItem === rcItem);
+          });
+
+          if (matchIdx !== -1) {
+            claims[matchIdx] = { ...rc, ...claims[matchIdx] };
           } else {
-            localMap.set(key, rc);
+            claims.push(rc);
           }
         });
-        claims = Array.from(localMap.values());
+        claims = deduplicateClaims(claims);
         saveAdminClaims(claims);
       }
     }

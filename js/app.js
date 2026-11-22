@@ -156,18 +156,58 @@ function normalizeReport(report) {
   return item;
 }
 
+function deduplicateReports(reports) {
+  if (!Array.isArray(reports)) return [];
+  const seenIds = new Set();
+  const seenSignatures = new Set();
+  const cleaned = [];
+
+  for (const raw of reports) {
+    if (!raw || !raw.name) continue;
+    const r = normalizeReport(raw);
+
+    // Filter out test artifact reports
+    if (r.name.includes('Audit Test') || r.name.toLowerCase().includes('test blue water bottle')) {
+      continue;
+    }
+
+    const normName = r.name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normLoc = (r.location || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const sig = `${normName}|${r.type || 'lost'}|${normLoc}`;
+    const idKey = String(r.id);
+
+    if (seenIds.has(idKey) || (normName && seenSignatures.has(sig))) {
+      continue;
+    }
+
+    seenIds.add(idKey);
+    if (normName) seenSignatures.add(sig);
+    cleaned.push(r);
+  }
+  return cleaned;
+}
+
 function getReports() {
+  let items = [];
   try {
     const saved = JSON.parse(localStorage.getItem(REPORTS_KEY));
-    const items = Array.isArray(saved) && saved.length ? saved : SEED_REPORTS.map(x => ({ ...x }));
-    return items.map(normalizeReport);
+    items = Array.isArray(saved) && saved.length ? saved : SEED_REPORTS.map(x => ({ ...x }));
   } catch {
-    return SEED_REPORTS.map(x => ({ ...x })).map(normalizeReport);
+    items = SEED_REPORTS.map(x => ({ ...x }));
   }
+
+  const deduped = deduplicateReports(items);
+  if (items.length !== deduped.length) {
+    try {
+      localStorage.setItem(REPORTS_KEY, JSON.stringify(deduped));
+    } catch {}
+  }
+  return deduped;
 }
 
 function saveReports(reports) {
-  localStorage.setItem(REPORTS_KEY, JSON.stringify(reports.map(normalizeReport)));
+  const deduped = deduplicateReports(reports);
+  localStorage.setItem(REPORTS_KEY, JSON.stringify(deduped));
 }
 
 function escapeHTML(v) {
@@ -852,5 +892,6 @@ window.showToast = showToast;
 window.escapeHTML = escapeHTML;
 window.getReports = getReports;
 window.saveReports = saveReports;
+window.deduplicateReports = deduplicateReports;
 window.SEED_REPORTS = SEED_REPORTS;
 
